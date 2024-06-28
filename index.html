@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Темы для подкаста</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+    
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to right, #2c5364, #203a43, #0f2027);
+            color: #e0e0e0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+    
+        #app {
+            max-width: 1000px;
+            width: 90%;
+            padding: 40px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            margin: 20px auto;
+        }
+    
+        h1, h2 {
+            text-align: center;
+            color: #64ffda;
+            margin-bottom: 30px;
+            text-shadow: 0 0 10px rgba(100, 255, 218, 0.3);
+        }
+    
+        #topics, #questions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+    
+        button {
+            padding: 15px 25px;
+            background: linear-gradient(45deg, #00aeff, #a68eff);
+            color: #ffffff;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+    
+        button::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: rotate(45deg);
+            z-index: 1;
+            transition: all 0.6s ease;
+        }
+    
+        button:hover::before {
+            left: 100%;
+        }
+    
+        button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+    
+        #questionList {
+            list-style-type: none;
+            padding: 0;
+        }
+    
+        #questionList li {
+            background-color: rgba(255, 255, 255, 0.1);
+            margin-bottom: 20px;
+            padding: 20px;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid #64ffda;
+        }
+    
+        #questionList li:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+            transform: translateX(10px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+    
+        #header {
+            text-align: center;
+            padding: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #64ffda;
+        }
+    
+        #names {
+            display: inline-block;
+            min-width: 200px;
+        }
+    
+        #footer {
+            text-align: center;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+    
+        #footer a {
+            color: #64ffda;
+            text-decoration: none;
+        }
+    
+        #typingText {
+            font-size: 36px;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 20px;
+            min-height: 50px;
+        }
+        @keyframes neonPulse {
+            0%, 100% {
+              text-shadow: 
+                0 0 7px #fff,
+                0 0 10px #fff,
+                0 0 21px #fff,
+                0 0 42px #64ffda,
+                0 0 82px #64ffda,
+                0 0 92px #64ffda,
+                0 0 102px #64ffda,
+                0 0 151px #64ffda;
+            }
+            50% {
+              text-shadow: 
+                0 0 4px #fff,
+                0 0 7px #fff,
+                0 0 13px #fff,
+                0 0 25px #64ffda,
+                0 0 50px #64ffda,
+                0 0 60px #64ffda,
+                0 0 70px #64ffda,
+                0 0 90px #64ffda;
+            }
+          }
+          
+          #typingText {
+            color: #fff;
+            animation: neonPulse 1.5s ease-in-out infinite;
+          }
+    
+        @media (max-width: 768px) {
+            #app {
+                padding: 30px;
+            }
+            
+            button {
+                font-size: 14px;
+                padding: 12px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="header">
+        ПОДКАСТ: <span id="names"></span>
+    </div>
+    <div id="typingText"></div>
+    <div id="app">
+        <h1>Выберите тему для подкаста</h1>
+        <div id="topics">
+            <!-- Темы будут добавлены здесь JavaScript-ом -->
+        </div>
+        <div id="questions" style="display:none;">
+            <h2>Вопросы по теме</h2>
+            <ul id="questionList"></ul>
+            <button onclick="showTopics()">Назад к темам</button>
+        </div>
+    </div>
+    <div id="footer">
+        <a href="https://www.instagram.com/MIkel_hooter" target="_blank">Наш Instagram:Mike_hooter</a>
+    </div>
+    <script>
+        const podcastTopics = [
+            {
+                title: "Наши лучшие воспоминания",
+                questions: [
+                    "Какая самая смешная история произошла с нами?",
+                    "Какое ваше любимое совместное воспоминание?",
+                    "Есть ли моменты, которые заставляют вас смеяться каждый раз, когда вы их вспоминаете?"
+                ]
+            },
+            {
+                title: "Наши лучшие путешествия",
+                questions: [
+                    "Куда мы путешествовали вместе и что запомнилось больше всего?",
+                    "Какие приключения мы пережили вместе?",
+                    "Какая страна или город произвели на вас наибольшее впечатление?"
+                ]
+            },
+            {
+                title: "Фильмы и сериалы, которые мы любим",
+                questions: [
+                    "Какой фильм или сериал вы рекомендуете друзьям?",
+                    "Какие фильмы или сериалы мы должны посмотреть вместе?",
+                    "Какая сцена из фильма или сериала вас больше всего тронула или насмешила?"
+                ]
+            },
+            {
+                title: "Книги, которые нас вдохновляют",
+                questions: [
+                    "Какая книга произвела на вас наибольшее впечатление?",
+                    "Какие книги вы советуете друзьям?",
+                    "Есть ли книга, которую вы хотели бы обсудить вместе?"
+                ]
+            },
+            {
+                title: "Наши хобби и увлечения",
+                questions: [
+                    "Чем вы увлекаетесь в свободное время?",
+                    "Какое новое хобби вы хотели бы попробовать?",
+                    "Есть ли увлечение, которым мы могли бы заняться вместе?"
+                ]
+            },
+            {
+                title: "Музыка, которая нас объединяет",
+                questions: [
+                    "Какой ваш любимый концерт или музыкальное событие?",
+                    "Какие песни или группы вы рекомендуете друзьям?",
+                    "Какую музыку мы должны послушать вместе?"
+                ]
+            },
+            {
+                title: "Любимые блюда и кулинарные эксперименты",
+                questions: [
+                    "Какое ваше любимое блюдо и почему?",
+                    "Есть ли у вас рецепт, которым вы хотели бы поделиться?",
+                    "Какие кулинарные эксперименты мы могли бы попробовать вместе?"
+                ]
+            },
+            {
+                title: "Наши мечты и планы на будущее",
+                questions: [
+                    "О чем вы мечтаете и к чему стремитесь?",
+                    "Какие планы вы хотели бы реализовать в ближайшие годы?",
+                    "Есть ли что-то, что мы могли бы сделать вместе, чтобы приблизиться к мечте?"
+                ]
+            },
+            {
+                title: "Жизненные уроки, которые мы извлекли",
+                questions: [
+                    "Какой самый важный урок вы извлекли из жизни?",
+                    "Какие советы вы дали бы своим друзьям?",
+                    "Что вы хотели бы изменить в своей жизни и почему?"
+                ]
+            },
+            {
+                title: "Любимые игры и развлечения",
+                questions: [
+                    "Какая ваша любимая настольная игра?",
+                    "Какие игры мы должны попробовать вместе?",
+                    "Какое развлечение или игра приносит вам больше всего удовольствия?"
+                ]
+            }
+        ];
+
+        function showTopics() {
+            const topicsDiv = document.getElementById('topics');
+            const questionsDiv = document.getElementById('questions');
+            
+            topicsDiv.innerHTML = '';
+            podcastTopics.forEach((topic, index) => {
+                const button = document.createElement('button');
+                button.textContent = topic.title;
+                button.onclick = () => showQuestions(index);
+                topicsDiv.appendChild(button);
+            });
+            
+            topicsDiv.style.display = 'grid';
+            questionsDiv.style.display = 'none';
+        }
+
+        function showQuestions(topicIndex) {
+            const topicsDiv = document.getElementById('topics');
+            const questionsDiv = document.getElementById('questions');
+            const questionList = document.getElementById('questionList');
+            
+            questionList.innerHTML = '';
+            podcastTopics[topicIndex].questions.forEach(question => {
+                const li = document.createElement('li');
+                li.textContent = question;
+                questionList.appendChild(li);
+            });
+            
+            topicsDiv.style.display = 'none';
+            questionsDiv.style.display = 'block';
+        }
+
+        // Анимация имен
+        const names = ['Baha', 'Umed', 'Amir', 'Hudayar', 'Anton'];
+        let currentNameIndex = 0;
+        
+
+        function animateNames() {
+            const namesElement = document.getElementById('names');
+            namesElement.textContent = names[currentNameIndex];
+            namesElement.style.opacity = 1;
+            
+
+            setTimeout(() => {
+                namesElement.style.opacity = 0;
+                currentNameIndex = (currentNameIndex + 1) % names.length;
+                setTimeout(animateNames, 500); // Задержка перед показом следующего имени
+            }, 2000); // Время отображения каждого имени
+        }
+        function typeText() {
+            const typingElement = document.getElementById('typingText');
+            const currentText = texts[currentTextIndex];
+            let charIndex = 0;
+        
+            function type() {
+                if (charIndex < currentText.length) {
+                    typingElement.textContent += currentText.charAt(charIndex);
+                    charIndex++;
+                    setTimeout(type, 100); // Скорость печатания
+                } else {
+                    // Добавляем класс для свечения
+                    typingElement.classList.add('glow');
+                    setTimeout(() => {
+                        // Удаляем класс перед стиранием
+                        typingElement.classList.remove('glow');
+                        eraseText();
+                    }, 2000); // Задержка перед стиранием
+                }
+            }
+        
+            function eraseText() {
+                if (typingElement.textContent.length > 0) {
+                    typingElement.textContent = typingElement.textContent.slice(0, -1);
+                    setTimeout(eraseText, 50); // Скорость стирания
+                } else {
+                    currentTextIndex = (currentTextIndex + 1) % texts.length;
+                    setTimeout(typeText, 500); // Задержка перед следующим текстом
+                }
+            }
+        
+            type();
+        }
+        
+
+        // Анимация печатающегося текста
+        const texts = [
+            "комната номер 9025",
+            "жду каждого нахуй",
+            "обязательное прибытие",
+           
+        ];
+        let currentTextIndex = 0;
+
+        function typeText() {
+            const typingElement = document.getElementById('typingText');
+            const currentText = texts[currentTextIndex];
+            let charIndex = 0;
+
+            function type() {
+                if (charIndex < currentText.length) {
+                    typingElement.textContent += currentText.charAt(charIndex);
+                    charIndex++;
+                    setTimeout(type, 100); // Скорость печатания
+                } else {
+                    setTimeout(eraseText, 2000); // Задержка перед стиранием
+                }
+            }
+
+            function eraseText() {
+                if (typingElement.textContent.length > 0) {
+                    typingElement.textContent = typingElement.textContent.slice(0, -1);
+                    setTimeout(eraseText, 50); // Скорость стирания
+                } else {
+                    currentTextIndex = (currentTextIndex + 1) % texts.length;
+                    setTimeout(typeText, 500); // Задержка перед следующим текстом
+                }
+            }
+
+            type();
+        }
+
+        // Инициализация при загрузке страницы
+        showTopics();
+        animateNames();
+        typeText();
+    </script>
+</body>
+</html>
